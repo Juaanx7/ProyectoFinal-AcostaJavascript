@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const montoInput = document.getElementById("monto");
   const cuotasInput = document.getElementById("cuotas");
 
-  // Cargar datos de localStorage al cargar la página
+  // Se cargan los datos de localStorage
   cargarDatosDeStorage();
 
   form.addEventListener("submit", function (event) {
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       mostrarResultados(arrayCuotas, devolucionTotal);
 
-      // Guardar datos en localStorage
+      // Guarda datos en el localStorage
       guardarDatosEnStorage(monto, cuotas, arrayCuotas, devolucionTotal);
   }
 
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function validarMonto() {
       const monto = Number(montoInput.value);
-      // Validar que el monto sea mayor que 0
+      // Valida que el monto sea mayor que 0
       if (monto > 0) {
           cambiarEstiloInput(montoInput, true);
       } else {
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function validarCuotas() {
       const cuotas = Number(cuotasInput.value);
-      // Validar que las cuotas estén dentro del rango permitido
+      // Valida que las cuotas estén dentro del rango
       if (cuotas > 0 && cuotas <= 12) {
           cambiarEstiloInput(cuotasInput, true);
       } else {
@@ -89,20 +89,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function mostrarResultados(cuotas, total) {
-      resultadoDiv.innerHTML = '';
+      document.getElementById("resultado-content").innerHTML = '';
 
+      // Muestra cada cuota
       cuotas.forEach(cuota => {
           const cuotaDiv = document.createElement('div');
           cuotaDiv.textContent = `Cuota número: ${cuota.numeroCuota} - Monto de cuota: $${cuota.monto}`;
-          resultadoDiv.appendChild(cuotaDiv);
+          document.getElementById("resultado-content").appendChild(cuotaDiv);
       });
 
+      // Muestra el total a devolver
       const totalDiv = document.createElement('div');
       totalDiv.innerHTML = `<strong>Total a devolver: $${total.toFixed(2)}</strong>`;
-      resultadoDiv.appendChild(totalDiv);
+      document.getElementById("resultado-content").appendChild(totalDiv);
   }
 
-  // Funciones para calcular la tasa de interés, el monto de cada cuota y el total a devolver
   function calculoInteres(cuotas) {
       let tasaInteres = 0;
       if (cuotas <= 3) {
@@ -126,4 +127,5 @@ document.addEventListener("DOMContentLoaded", function () {
       return total;
   }
 });
+
 
