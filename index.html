@@ -8,7 +8,18 @@
     <title>Calculador de prestamos</title>
 </head>
 <body>    
-    <p>¡Gracias por usar nuestro calculador de prestamos!</p>
+    <h1>Calculador de Préstamos</h1>
+    <form id="prestamo-form">
+        <label for="monto">Monto a Solicitar:</label>
+        <input type="number" id="monto" required>
+        
+        <label for="cuotas">Cantidad de Cuotas (máximo 12):</label>
+        <input type="number" id="cuotas" required>
+        
+        <button type="submit">Calcular</button>
+    </form>
+    
+    <div id="resultado"></div>
     
 </body>
 </html>

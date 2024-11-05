@@ -1,62 +1,129 @@
-// Se le solicita el usuario el ingreso de los datos para el prestamo:
-let monto = Number(prompt("Ingrese el monto a solicitar:"));
-let cuotas = Number(prompt("Ingrese la cantidad de cuotas en que quiera pagarlo, como máximo 12"));
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("prestamo-form");
+  const resultadoDiv = document.getElementById("resultado");
+  const montoInput = document.getElementById("monto");
+  const cuotasInput = document.getElementById("cuotas");
 
-let tasaInteres = calculoInteres(cuotas);
-let precioCuota = calculoCuotas(monto, tasaInteres, cuotas);
-let devolucionTotal = devolucion(precioCuota, cuotas);
+  // Cargar datos de localStorage al cargar la página
+  cargarDatosDeStorage();
 
-// Creo un array para almacenar el detalle de cada cuota:
-let arrayCuotas = [];
-
-if (cuotas <= 12) {
-  // Use un for para guardar en el array las cuotas
-  for (let i = 1; i <= cuotas; i++) {
-    // Guardo cada cuota como un objeto en el array:
-    arrayCuotas.push({
-      numeroCuota: i,
-      monto: precioCuota.toFixed(2)
-    });
-  }
-
-  // Armo el mensaje a partir del array de cuotas:
-  let mensaje = '';
-  arrayCuotas.forEach(cuota => {
-    mensaje += `Cuota número: ${cuota.numeroCuota} - Monto de cuota: $${cuota.monto}\n`;
+  form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      calcularPrestamo();
   });
 
-  // Añado el total a devolver al final del mensaje
-  mensaje += `\nTotal a devolver: $${devolucionTotal.toFixed(2)}`;
-  
-  // Muestro el mensaje en un alert
-  alert(mensaje);
-  
-} else {
-  alert("¡Superó el máximo de cuotas permitido!");
-}
+  montoInput.addEventListener("input", validarMonto);
+  cuotasInput.addEventListener("input", validarCuotas);
 
-// Función para calcular la tasa de interés:
-function calculoInteres(cuotas) {
-  let tasaInteres = 0;
-  if (cuotas <= 3) {
-    tasaInteres = 0.30;  // 30% de interés
-  } else if (cuotas <= 6) {
-    tasaInteres = 0.60;  // 60% de interés
-  } else if (cuotas <= 12) {
-    tasaInteres = 0.90;  // 90% de interés
+  function cargarDatosDeStorage() {
+      const datosGuardados = JSON.parse(localStorage.getItem("prestamo"));
+
+      if (datosGuardados) {
+          montoInput.value = datosGuardados.monto;
+          cuotasInput.value = datosGuardados.cuotas;
+          mostrarResultados(datosGuardados.arrayCuotas, datosGuardados.devolucionTotal);
+      }
   }
-  return tasaInteres;
-}
 
-// Función para calcular el monto de cada cuota
-function calculoCuotas(monto, tasaInteres, cuotas) {
-  let interes = monto * tasaInteres; 
-  let precioCuota = (monto + interes) / cuotas;
-  return precioCuota;
-}
+  function calcularPrestamo() {
+      const monto = Number(montoInput.value);
+      const cuotas = Number(cuotasInput.value);
 
-// Función para calcular el total a devolver
-function devolucion(precioCuota, cuotas) {    
-  let total = precioCuota * cuotas;
-  return total;
-}
+      if (cuotas > 12) {
+          resultadoDiv.innerHTML = "<p>¡Superó el máximo de cuotas permitido!</p>";
+          cambiarEstiloInput(cuotasInput, false);
+          return;
+      }
+
+      cambiarEstiloInput(cuotasInput, true); // Cambia a azul si es correcto
+
+      let tasaInteres = calculoInteres(cuotas);
+      let precioCuota = calculoCuotas(monto, tasaInteres, cuotas);
+      let devolucionTotal = devolucion(precioCuota, cuotas);
+
+      let arrayCuotas = [];
+      for (let i = 1; i <= cuotas; i++) {
+          arrayCuotas.push({
+              numeroCuota: i,
+              monto: precioCuota.toFixed(2)
+          });
+      }
+      mostrarResultados(arrayCuotas, devolucionTotal);
+
+      // Guardar datos en localStorage
+      guardarDatosEnStorage(monto, cuotas, arrayCuotas, devolucionTotal);
+  }
+
+  function guardarDatosEnStorage(monto, cuotas, arrayCuotas, devolucionTotal) {
+      const datos = {
+          monto: monto,
+          cuotas: cuotas,
+          arrayCuotas: arrayCuotas,
+          devolucionTotal: devolucionTotal
+      };
+      localStorage.setItem("prestamo", JSON.stringify(datos));
+  }
+
+  function cambiarEstiloInput(input, esValido) {
+      input.style.borderColor = esValido ? 'blue' : 'red';
+  }
+
+  function validarMonto() {
+      const monto = Number(montoInput.value);
+      // Validar que el monto sea mayor que 0
+      if (monto > 0) {
+          cambiarEstiloInput(montoInput, true);
+      } else {
+          cambiarEstiloInput(montoInput, false);
+      }
+  }
+
+  function validarCuotas() {
+      const cuotas = Number(cuotasInput.value);
+      // Validar que las cuotas estén dentro del rango permitido
+      if (cuotas > 0 && cuotas <= 12) {
+          cambiarEstiloInput(cuotasInput, true);
+      } else {
+          cambiarEstiloInput(cuotasInput, false);
+      }
+  }
+
+  function mostrarResultados(cuotas, total) {
+      resultadoDiv.innerHTML = '';
+
+      cuotas.forEach(cuota => {
+          const cuotaDiv = document.createElement('div');
+          cuotaDiv.textContent = `Cuota número: ${cuota.numeroCuota} - Monto de cuota: $${cuota.monto}`;
+          resultadoDiv.appendChild(cuotaDiv);
+      });
+
+      const totalDiv = document.createElement('div');
+      totalDiv.innerHTML = `<strong>Total a devolver: $${total.toFixed(2)}</strong>`;
+      resultadoDiv.appendChild(totalDiv);
+  }
+
+  // Funciones para calcular la tasa de interés, el monto de cada cuota y el total a devolver
+  function calculoInteres(cuotas) {
+      let tasaInteres = 0;
+      if (cuotas <= 3) {
+          tasaInteres = 0.30;  // 30% de interés
+      } else if (cuotas <= 6) {
+          tasaInteres = 0.60;  // 60% de interés
+      } else if (cuotas <= 12) {
+          tasaInteres = 0.90;  // 90% de interés
+      }
+      return tasaInteres;
+  }
+
+  function calculoCuotas(monto, tasaInteres, cuotas) {
+      let interes = monto * tasaInteres; 
+      let precioCuota = (monto + interes) / cuotas;
+      return precioCuota;
+  }
+
+  function devolucion(precioCuota, cuotas) {    
+      let total = precioCuota * cuotas;
+      return total;
+  }
+});
+
