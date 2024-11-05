@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("prestamo-form");
   const resultadoDiv = document.getElementById("resultado");
   const montoInput = document.getElementById("monto");
@@ -94,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Muestra cada cuota
       cuotas.forEach(cuota => {
           const cuotaDiv = document.createElement('div');
-          cuotaDiv.textContent = `Cuota número: ${cuota.numeroCuota} - Monto de cuota: $${cuota.monto}`;
+          cuotaDiv.textContent = `Cuota número: ${cuota.numeroCuota} : $${cuota.monto}`;
           document.getElementById("resultado-content").appendChild(cuotaDiv);
       });
 
@@ -126,6 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
       let total = precioCuota * cuotas;
       return total;
   }
-});
+
 
 
