@@ -6,37 +6,51 @@
     <title>Calculador de Préstamos</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script defer src="index.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- Cargar Toastify con defer -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
+    <script type="module" src="./js/index.js" defer></script>
 </head>
 <body>
-    <div class="container mt-5 w-25">
-        <h1 class="text-center">Calculador de Préstamos</h1>
-        
-        <div class="card mt-4">
-            <div class="card-body">
-                <form id="prestamo-form">
-                    <div class="form-group">
-                        <label for="monto">Monto a solicitar:</label>
-                        <input type="number" id="monto" class="form-control" placeholder="Ingrese el monto" required>
+    <div class="container mt-5">
+        <!-- Título centrado en la página -->
+        <h1 class="text-center mb-4">Calculador de Préstamos</h1>
+
+        <!-- Contenedor principal con flexbox para las dos secciones -->
+        <div class="row">
+            <!-- Sección de Cálculo de préstamo -->
+            <div class="col-md-6">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <form id="prestamo-form">
+                            <div class="form-group">
+                                <label for="monto">Monto a solicitar:</label>
+                                <input type="number" id="monto" class="form-control" placeholder="Ingrese el monto" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cuotas">Cantidad de cuotas:</label>
+                                <input type="number" id="cuotas" class="form-control" placeholder="Máximo 12 cuotas" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Calcular</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="cuotas">Cantidad de cuotas:</label>
-                        <input type="number" id="cuotas" class="form-control" placeholder="Máximo 12 cuotas" required>
+                </div>
+
+                <div id="resultado" class="mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Detalle de las cuotas:</h5>
+                            <div id="resultado-content"></div>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Calcular</button>
-                </form>
+                </div>  
+            </div>
+
+            <!-- Sección de Historial de cálculos (vacía inicialmente) -->
+            <div class="col-md-6" id="historial-container">
+                <!-- El historial será generado desde JavaScript -->
             </div>
         </div>
-
-        <div id="resultado" class="mt-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Detalle de las cuotas:</h5>
-                    <div id="resultado-content"></div>
-                </div>
-            </div>
-        </div>        
     </div>
-
 </body>
 </html>
