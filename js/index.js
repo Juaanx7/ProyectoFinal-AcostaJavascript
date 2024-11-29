@@ -1,3 +1,6 @@
+// Importa las funciones desde prestamo.js
+import { calculoInteres, calculoCuotas, devolucion } from "./prestamo.js";
+
 const form = document.getElementById("prestamo-form");
 const resultadoDiv = document.getElementById("resultado");
 const montoInput = document.getElementById("monto");
@@ -16,67 +19,69 @@ montoInput.addEventListener("input", validarMonto);
 cuotasInput.addEventListener("input", validarCuotas);
 
 function cargarDatosDeStorage() {
-  const datosGuardados = JSON.parse(localStorage.getItem("prestamo"));
-
-  if (datosGuardados) {
-    montoInput.value = datosGuardados.monto;
-    cuotasInput.value = datosGuardados.cuotas;
-    mostrarResultados(
-      datosGuardados.arrayCuotas,
-      datosGuardados.devolucionTotal
-    );
+  try {
+    const datosGuardados = JSON.parse(localStorage.getItem("prestamo"));
+    if (datosGuardados) {
+      montoInput.value = datosGuardados.monto;
+      cuotasInput.value = datosGuardados.cuotas;
+      mostrarResultados(
+        datosGuardados.arrayCuotas,
+        datosGuardados.devolucionTotal
+      );
+    }
+  } catch (error) {
+    mostrarMensajeError("Hubo un problema al cargar los datos guardados.");
+    console.error(error);
   }
-
-  mostrarHistorial(); // Mostrar historial al cargar la página
 }
 
+
 function calcularPrestamo() {
-  const monto = Number(montoInput.value);
-  const cuotas = Number(cuotasInput.value);
+  try {
+    const monto = Number(montoInput.value);
+    const cuotas = Number(cuotasInput.value);
 
-  if (cuotas > 12) {
-    resultadoDiv.innerHTML = "<p>¡Superó el máximo de cuotas permitido!</p>";
-    cambiarEstiloInput(cuotasInput, false);
+    if (cuotas > 12) {
+      resultadoDiv.innerHTML = "<p>¡Superó el máximo de cuotas permitido!</p>";
+      cambiarEstiloInput(cuotasInput, false);
+      throw new Error("Superó el máximo de cuotas permitido");
+    }
 
-    // Mostrar notificación de error con Toastify
+    cambiarEstiloInput(cuotasInput, true);
+
+    // Calcular los datos
+    let tasaInteres = calculoInteres(cuotas);
+    let precioCuota = calculoCuotas(monto, tasaInteres, cuotas);
+    let devolucionTotal = devolucion(precioCuota, cuotas);
+
+    let arrayCuotas = [];
+    for (let i = 1; i <= cuotas; i++) {
+      arrayCuotas.push({
+        numeroCuota: i,
+        monto: precioCuota.toFixed(2),
+      });
+    }
+
+    mostrarResultados(arrayCuotas, devolucionTotal);
+    guardarDatosEnStorage(monto, cuotas, arrayCuotas, devolucionTotal);
+    agregarAlHistorial(monto, cuotas, precioCuota, devolucionTotal);
+
+    // Actualizar el gráfico con los datos calculados
+    actualizarGrafico(monto, cuotas);
+
+    // Notificación de éxito
     Toastify({
-      text: "¡Superó el máximo de cuotas permitido!",
+      text: "Préstamo calculado correctamente",
       duration: 3000,
       style: {
-        background: "linear-gradient(to right, #ff5f6d, #ffc3a0)"
-      }
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
     }).showToast();
-
-    return;
+  } catch (error) {
+    // En caso de error, mostrar un mensaje de UX amigable
+    mostrarMensajeError("Ocurrió un error al calcular el préstamo. Intenta nuevamente.");
+    console.error(error); // Mostrar el error técnico en la consola
   }
-
-  cambiarEstiloInput(cuotasInput, true); // Cambia a azul si es correcto
-
-  let tasaInteres = calculoInteres(cuotas);
-  let precioCuota = calculoCuotas(monto, tasaInteres, cuotas);
-  let devolucionTotal = devolucion(precioCuota, cuotas);
-
-  let arrayCuotas = [];
-  for (let i = 1; i <= cuotas; i++) {
-    arrayCuotas.push({
-      numeroCuota: i,
-      monto: precioCuota.toFixed(2),
-    });
-  }
-  mostrarResultados(arrayCuotas, devolucionTotal);
-
-  // Guarda datos en el localStorage
-  guardarDatosEnStorage(monto, cuotas, arrayCuotas, devolucionTotal);
-  agregarAlHistorial(monto, cuotas, precioCuota, devolucionTotal);
-
-  // Mostrar notificación de éxito con Toastify
-  Toastify({
-    text: "Préstamo calculado correctamente",
-    duration: 3000,
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)"
-    }
-  }).showToast();
 }
 
 function guardarDatosEnStorage(monto, cuotas, arrayCuotas, devolucionTotal) {
@@ -161,7 +166,7 @@ function mostrarHistorial() {
     historial.forEach((item) => {
       const historialItem = document.createElement("div");
       historialItem.classList.add("historial-item");
-      historialItem.innerHTML = `
+      historialItem.innerHTML = ` 
                 <p><strong>Monto:</strong> $${
                   item.monto
                 } - <strong>Cuotas:</strong> ${
@@ -191,24 +196,42 @@ function borrarHistorial() {
   mostrarHistorial(); // Vuelve a mostrar el historial vacío
 }
 
-function calculoInteres(cuotas) {
-  let tasaInteres = 0;
-  if (cuotas <= 3) {
-    tasaInteres = 0.3; // 30% de interés
-  } else if (cuotas <= 6) {
-    tasaInteres = 0.6; // 60% de interés
-  } else if (cuotas <= 12) {
-    tasaInteres = 0.9; // 90% de interés
+// Inicializar el gráfico (sin datos)
+const ctx = document.getElementById("grafico-cuotas").getContext("2d");
+const grafico = new Chart(ctx, {
+  type: "line", // Tipo de gráfico
+  data: {
+    labels: [], // Etiquetas del eje X (por ejemplo, cantidad de cuotas)
+    datasets: [
+      {
+        label: "Cuota del préstamo",
+        data: [], // Datos del gráfico (cuotas calculadas)
+        borderColor: "rgba(75, 192, 192, 1)",
+        fill: false,
+      },
+    ],
+  },
+});
+
+// Función para actualizar el gráfico con los datos calculados
+function actualizarGrafico(monto, cuotas) {
+  // Calcular las cuotas utilizando la función que ya tienes
+  let tasaInteres = calculoInteres(cuotas); // Obtener la tasa de interés para las cuotas
+  let cuotasCalculadas = [];
+  for (let i = 1; i <= cuotas; i++) {
+    const cuota = calculoCuotas(monto, tasaInteres, i); // Calcular el monto de cada cuota
+    cuotasCalculadas.push(cuota.toFixed(2)); // Guardar las cuotas calculadas (con 2 decimales)
   }
-  return tasaInteres;
-}
 
-function calculoCuotas(monto, tasaInteres, cuotas) {
-  let interes = monto * tasaInteres;
-  let precioCuota = (monto + interes) / cuotas;
-  return precioCuota;
-}
+  // Actualizar etiquetas del gráfico con la cantidad de cuotas
+  grafico.data.labels = Array.from(
+    { length: cuotas },
+    (_, i) => `Cuota ${i + 1}`
+  );
 
-function devolucion(precioCuota, cuotas) {
-  return precioCuota * cuotas;
+  // Actualizar los datos del gráfico con los valores de las cuotas
+  grafico.data.datasets[0].data = cuotasCalculadas;
+
+  // Actualizar el gráfico para reflejar los cambios
+  grafico.update();
 }

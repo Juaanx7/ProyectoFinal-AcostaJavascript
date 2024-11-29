@@ -63,3 +63,10 @@ h1 {
 #historial-container {
     flex: 1; /* Esto asegura que ambas tarjetas crezcan de manera uniforme */
 }
+
+#grafico-container {
+    width: 100%;
+    max-width: 500px; /* Puedes ajustar el tamaño máximo */
+    margin: 0 auto;   /* Centrado dentro de la columna */
+    padding-top: 20px;
+}
