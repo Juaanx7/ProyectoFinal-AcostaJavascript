@@ -1,0 +1,72 @@
+body {
+    background-color: #f8f9fa;
+    padding-top: 50px; /* Espacio para que no quede pegado al borde superior */
+}
+
+h1 {
+    color: #000000;
+    margin-bottom: 30px; /* Separar el título del resto de la página */
+    text-align: center; /* Asegura que el título esté centrado */
+}
+
+.form-control {
+    border: 2px solid #007bff;
+}
+
+.btn {
+    width: 100%;
+    font-weight: bold;
+}
+
+#resultado {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    margin-top: 15px;
+}
+
+/* Estilos para el historial */
+#historial-container {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Esto garantiza que el contenedor de las dos tarjetas use flexbox */
+.d-flex {
+    display: flex;
+    justify-content: space-between; /* Para que las tarjetas se distribuyan de manera equitativa */
+    gap: 15px; /* Espacio entre las dos tarjetas */
+    align-items: stretch; /* Esto asegura que ambas tarjetas tengan la misma altura */
+}
+
+/* Asegura que ambas tarjetas tengan la misma altura */
+.w-50 {
+    flex: 1; /* Ocupa el 50% del espacio disponible */
+    display: flex;
+    flex-direction: column; /* Permite que el contenido de las tarjetas se alinee verticalmente */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Asegura que el contenido se distribuya bien dentro de la tarjeta */
+}
+
+/* Esto garantiza que la tarjeta del historial y la del cálculo tengan la misma altura */
+#resultado,
+#historial-container {
+    flex: 1; /* Esto asegura que ambas tarjetas crezcan de manera uniforme */
+}
+
+#grafico-container {
+    width: 100%;
+    max-width: 500px; /* Puedes ajustar el tamaño máximo */
+    margin: 0 auto;   /* Centrado dentro de la columna */
+    padding-top: 20px;
+}

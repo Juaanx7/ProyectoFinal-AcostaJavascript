@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador de Préstamos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- Cargar Toastify con defer -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="./js/index.js" defer></script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <!-- Título centrado en la página -->
+        <h1 class="text-center mb-4">Calculador de Préstamos</h1>
+
+        <!-- Contenedor principal con flexbox para las tres secciones -->
+        <div class="row">
+            <!-- Sección de gráfico (Columna izquierda) -->
+            <div class="col-md-4">
+                <div id="grafico-container" class="mb-4">
+                    <canvas id="grafico-cuotas"></canvas>
+                </div>
+            </div>
+
+            <!-- Sección de Cálculo de préstamo (Columna central) -->
+            <div class="col-md-4">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <form id="prestamo-form">
+                            <div class="form-group">
+                                <label for="monto">Monto a solicitar:</label>
+                                <input type="number" id="monto" class="form-control" placeholder="Ingrese el monto"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="tasa">Selecciona la cantidad de cuotas:</label>
+                                <select id="cuotas" name="cuotas">
+                                    <option value="3">3 cuotas (30% de interes)</option>
+                                    <option value="6">6 cuotas (60% de interés)</option>
+                                    <option value="12">12 cuotas (90% de interés)</option>
+                                </select>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Calcular</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="resultado" class="mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Detalle de las cuotas:</h5>
+                            <div id="resultado-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Historial de cálculos (Columna derecha) -->
+            <div class="col-md-4" id="historial-container">
+                <!-- El historial será generado desde JavaScript -->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
