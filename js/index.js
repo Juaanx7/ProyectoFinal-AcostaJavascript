@@ -235,3 +235,38 @@ function actualizarGrafico(monto, cuotas) {
   // Actualizar el gráfico para reflejar los cambios
   grafico.update();
 }
+
+// ----- CAMBIO DE TEMA OSCURO/CLARO ------
+const themeToggle = document.getElementById("theme-toggle");
+const themeIcon = document.getElementById("theme-icon");
+
+// Cambiar tema y actualizar íconos
+function toggleTheme() {
+  const isDarkMode = themeToggle.checked;
+  document.body.classList.toggle("dark-theme", isDarkMode);
+  
+  // Actualizar el ícono según el tema
+  if (isDarkMode) {
+    themeIcon.classList.replace("fa-sun", "fa-moon");
+  } else {
+    themeIcon.classList.replace("fa-moon", "fa-sun");
+  }
+
+  // Guardar preferencia en localStorage
+  localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+}
+
+// Verificar preferencia de tema al cargar la página
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "dark") {
+  themeToggle.checked = true;
+  document.body.classList.add("dark-theme");
+  themeIcon.classList.add("fa-moon");
+} else {
+  themeToggle.checked = false;
+  document.body.classList.remove("dark-theme");
+  themeIcon.classList.add("fa-sun");
+}
+
+themeToggle.addEventListener("change", toggleTheme);
+

@@ -1,72 +1,152 @@
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --card-background: #f8f9fa;
+    --button-background: #007bff;
+    --button-text-color: #ffffff;
+}
+
+.dark-theme {
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --card-background: #1e1e1e;
+    --button-background: #6c757d;
+    --button-text-color: #ffffff;
+}
+
 body {
-    background-color: #f8f9fa;
-    padding-top: 50px; /* Espacio para que no quede pegado al borde superior */
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding-top: 50px; 
+    transition: background-color 0.3s, color 0.3s;
 }
 
 h1 {
-    color: #000000;
-    margin-bottom: 30px; /* Separar el título del resto de la página */
-    text-align: center; /* Asegura que el título esté centrado */
+    color: var(--text-color);
+    margin-bottom: 30px; 
+    text-align: center;
 }
 
 .form-control {
-    border: 2px solid #007bff;
+    border: 2px solid var(--button-background);
 }
 
 .btn {
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    border: none;
     width: 100%;
     font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn:hover {
+    opacity: 0.8;
 }
 
 #resultado {
-    background-color: #ffffff;
+    background-color: var(--card-background);
+    color: var(--text-color);
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .card {
+    background-color: var(--card-background);
+    color: var(--text-color);
     margin-top: 15px;
+    transition: background-color 0.3s, color 0.3s;
 }
+
+/* Estilo para el interruptor (más pequeño) */
+.theme-switch-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .theme-switch-label input {
+    display: none;
+  }
+  
+  .theme-switch-label .slider {
+    position: relative;
+    width: 40px;  /* Hacerlo más pequeño */
+    height: 20px;
+    border-radius: 20px;
+    background-color: #ccc;
+    transition: background-color 0.3s;
+  }
+  
+  .theme-switch-label .slider:before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: transform 0.3s;
+  }
+  
+  /* Cuando el interruptor está activado (modo oscuro) */
+  .theme-switch-label input:checked + .slider {
+    background-color: #007bff;
+  }
+  
+  .theme-switch-label input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+  
+  /* Estilo para los iconos */
+  .theme-switch-label i {
+    margin-right: 10px;
+    font-size: 18px; /* Tamaño de los iconos */
+  }
+  
+  body.dark-theme .theme-switch-label i {
+    content: "\f185"; /* Código Unicode para luna */
+  }
+  
+  body:not(.dark-theme) .theme-switch-label i {
+    content: "\f185"; /* Código Unicode para sol */
+  }  
 
 /* Estilos para el historial */
 #historial-container {
-    background-color: #ffffff;
+    background-color: var(--card-background);
+    color: var(--text-color);
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-/* Esto garantiza que el contenedor de las dos tarjetas use flexbox */
 .d-flex {
     display: flex;
-    justify-content: space-between; /* Para que las tarjetas se distribuyan de manera equitativa */
-    gap: 15px; /* Espacio entre las dos tarjetas */
-    align-items: stretch; /* Esto asegura que ambas tarjetas tengan la misma altura */
+    justify-content: space-between;
+    gap: 15px;
+    align-items: stretch;
 }
 
-/* Asegura que ambas tarjetas tengan la misma altura */
 .w-50 {
-    flex: 1; /* Ocupa el 50% del espacio disponible */
+    flex: 1;
     display: flex;
-    flex-direction: column; /* Permite que el contenido de las tarjetas se alinee verticalmente */
+    flex-direction: column;
 }
 
 .card-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Asegura que el contenido se distribuya bien dentro de la tarjeta */
-}
-
-/* Esto garantiza que la tarjeta del historial y la del cálculo tengan la misma altura */
-#resultado,
-#historial-container {
-    flex: 1; /* Esto asegura que ambas tarjetas crezcan de manera uniforme */
+    justify-content: space-between;
 }
 
 #grafico-container {
     width: 100%;
-    max-width: 500px; /* Puedes ajustar el tamaño máximo */
-    margin: 0 auto;   /* Centrado dentro de la columna */
+    max-width: 500px;
+    margin: 0 auto;
     padding-top: 20px;
 }
