@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 :root {
     --background-color: #ffffff;
     --text-color: #000000;
@@ -61,7 +60,7 @@ h1 {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* Estilo para el interruptor (más pequeño) */
+/* Estilo para el interruptor */
 .theme-switch-label {
     position: relative;
     display: flex;
@@ -74,7 +73,7 @@ h1 {
   
   .theme-switch-label .slider {
     position: relative;
-    width: 40px;  /* Hacerlo más pequeño */
+    width: 40px; 
     height: 20px;
     border-radius: 20px;
     background-color: #ccc;
@@ -105,15 +104,15 @@ h1 {
   /* Estilo para los iconos */
   .theme-switch-label i {
     margin-right: 10px;
-    font-size: 18px; /* Tamaño de los iconos */
+    font-size: 18px; 
   }
   
   body.dark-theme .theme-switch-label i {
-    content: "\f185"; /* Código Unicode para luna */
+    content: "\f185"; 
   }
   
   body:not(.dark-theme) .theme-switch-label i {
-    content: "\f185"; /* Código Unicode para sol */
+    content: "\f185"; 
   }  
 
 /* Estilos para el historial */
@@ -137,16 +136,15 @@ h1 {
     flex: 1;
     display: flex;
     flex-direction: column;
-=======
 body {
     background-color: #f8f9fa;
-    padding-top: 50px; /* Espacio para que no quede pegado al borde superior */
+    padding-top: 50px; 
 }
 
 h1 {
     color: #000000;
-    margin-bottom: 30px; /* Separar el título del resto de la página */
-    text-align: center; /* Asegura que el título esté centrado */
+    margin-bottom: 30px; 
+    text-align: center; 
 }
 
 .form-control {
@@ -177,46 +175,34 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Esto garantiza que el contenedor de las dos tarjetas use flexbox */
 .d-flex {
     display: flex;
-    justify-content: space-between; /* Para que las tarjetas se distribuyan de manera equitativa */
-    gap: 15px; /* Espacio entre las dos tarjetas */
-    align-items: stretch; /* Esto asegura que ambas tarjetas tengan la misma altura */
+    justify-content: space-between; 
+    gap: 15px; 
+    align-items: stretch; 
 }
 
-/* Asegura que ambas tarjetas tengan la misma altura */
 .w-50 {
-    flex: 1; /* Ocupa el 50% del espacio disponible */
+    flex: 1;
     display: flex;
-    flex-direction: column; /* Permite que el contenido de las tarjetas se alinee verticalmente */
->>>>>>> 93fefc924f23e8ca07e5338591d97c9934d8af10
+    flex-direction: column;
 }
 
 .card-body {
     display: flex;
     flex-direction: column;
-<<<<<<< HEAD
     justify-content: space-between;
-=======
-    justify-content: space-between; /* Asegura que el contenido se distribuya bien dentro de la tarjeta */
+    justify-content: space-between;
 }
-
-/* Esto garantiza que la tarjeta del historial y la del cálculo tengan la misma altura */
-#resultado,
-#historial-container {
-    flex: 1; /* Esto asegura que ambas tarjetas crezcan de manera uniforme */
->>>>>>> 93fefc924f23e8ca07e5338591d97c9934d8af10
+#resultado, #historial-container {
+    flex: 1; 
 }
 
 #grafico-container {
     width: 100%;
-<<<<<<< HEAD
     max-width: 500px;
     margin: 0 auto;
-=======
-    max-width: 500px; /* Puedes ajustar el tamaño máximo */
-    margin: 0 auto;   /* Centrado dentro de la columna */
->>>>>>> 93fefc924f23e8ca07e5338591d97c9934d8af10
+    max-width: 500px;
+    margin: 0 auto; 
     padding-top: 20px;
 }

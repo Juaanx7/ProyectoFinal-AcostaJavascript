@@ -69,7 +69,7 @@ function calcularPrestamo() {
     // Actualizar el gráfico con los datos calculados
     actualizarGrafico(monto, cuotas);
 
-    // Notificación de éxito
+    // Notificación de exito
     Toastify({
       text: "Préstamo calculado correctamente",
       duration: 3000,
@@ -78,9 +78,8 @@ function calcularPrestamo() {
       },
     }).showToast();
   } catch (error) {
-    // En caso de error, mostrar un mensaje de UX amigable
+    // En caso de error:
     mostrarMensajeError("Ocurrió un error al calcular el préstamo. Intenta nuevamente.");
-    console.error(error); // Mostrar el error técnico en la consola
   }
 }
 
@@ -152,11 +151,10 @@ function agregarAlHistorial(monto, cuotas, precioCuota, devolucionTotal) {
   // Guarda el historial actualizado en localStorage
   localStorage.setItem("historial", JSON.stringify(historial));
 
-  mostrarHistorial(); // Actualiza el historial en pantalla
+  mostrarHistorial(); 
 }
 
 function mostrarHistorial() {
-  // Limpia el historial actual
   historialContainer.innerHTML = "";
 
   const historial = JSON.parse(localStorage.getItem("historial")) || [];
@@ -193,19 +191,19 @@ function mostrarHistorial() {
 
 function borrarHistorial() {
   localStorage.removeItem("historial");
-  mostrarHistorial(); // Vuelve a mostrar el historial vacío
+  mostrarHistorial();
 }
 
 // Inicializar el gráfico (sin datos)
 const ctx = document.getElementById("grafico-cuotas").getContext("2d");
 const grafico = new Chart(ctx, {
-  type: "line", // Tipo de gráfico
+  type: "line",
   data: {
-    labels: [], // Etiquetas del eje X (por ejemplo, cantidad de cuotas)
+    labels: [],
     datasets: [
       {
         label: "Cuota del préstamo",
-        data: [], // Datos del gráfico (cuotas calculadas)
+        data: [],
         borderColor: "rgba(75, 192, 192, 1)",
         fill: false,
       },
@@ -215,12 +213,11 @@ const grafico = new Chart(ctx, {
 
 // Función para actualizar el gráfico con los datos calculados
 function actualizarGrafico(monto, cuotas) {
-  // Calcular las cuotas utilizando la función que ya tienes
-  let tasaInteres = calculoInteres(cuotas); // Obtener la tasa de interés para las cuotas
+  let tasaInteres = calculoInteres(cuotas);
   let cuotasCalculadas = [];
   for (let i = 1; i <= cuotas; i++) {
-    const cuota = calculoCuotas(monto, tasaInteres, i); // Calcular el monto de cada cuota
-    cuotasCalculadas.push(cuota.toFixed(2)); // Guardar las cuotas calculadas (con 2 decimales)
+    const cuota = calculoCuotas(monto, tasaInteres, i);
+    cuotasCalculadas.push(cuota.toFixed(2));
   }
 
   // Actualizar etiquetas del gráfico con la cantidad de cuotas
@@ -231,11 +228,8 @@ function actualizarGrafico(monto, cuotas) {
 
   // Actualizar los datos del gráfico con los valores de las cuotas
   grafico.data.datasets[0].data = cuotasCalculadas;
-
-  // Actualizar el gráfico para reflejar los cambios
   grafico.update();
 }
-<<<<<<< HEAD
 
 // ----- CAMBIO DE TEMA OSCURO/CLARO ------
 const themeToggle = document.getElementById("theme-toggle");
