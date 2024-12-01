@@ -235,6 +235,7 @@ function actualizarGrafico(monto, cuotas) {
   // Actualizar el gráfico para reflejar los cambios
   grafico.update();
 }
+<<<<<<< HEAD
 
 // ----- CAMBIO DE TEMA OSCURO/CLARO ------
 const themeToggle = document.getElementById("theme-toggle");
@@ -270,3 +271,5 @@ if (savedTheme === "dark") {
 
 themeToggle.addEventListener("change", toggleTheme);
 
+=======
+>>>>>>> 93fefc924f23e8ca07e5338591d97c9934d8af10
