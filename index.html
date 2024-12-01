@@ -32,10 +32,10 @@
       <header class="d-flex justify-content-end mb-4">
         <label for="theme-toggle" class="theme-switch-label">
           <i id="theme-icon" class="fas"></i>
-          <input type="checkbox" id="theme-toggle">
+          <input type="checkbox" id="theme-toggle" />
           <span class="slider"></span>
         </label>
-      </header>      
+      </header>
 
       <h1 class="text-center mb-4">Calculador de Préstamos</h1>
 
@@ -76,6 +76,9 @@
               </form>
             </div>
           </div>
+
+          <!-- Contenedor para el spinner de carga -->
+          <div id="loading-spinner" class="spinner" style="display: none;"></div>
 
           <div id="resultado" class="mt-4">
             <div class="card">

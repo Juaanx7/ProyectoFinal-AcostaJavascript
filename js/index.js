@@ -35,9 +35,11 @@ function cargarDatosDeStorage() {
   }
 }
 
-
 function calcularPrestamo() {
   try {
+    // Mostrar el spinner de carga
+    document.getElementById("loading-spinner").style.display = "block";
+
     const monto = Number(montoInput.value);
     const cuotas = Number(cuotasInput.value);
 
@@ -79,7 +81,12 @@ function calcularPrestamo() {
     }).showToast();
   } catch (error) {
     // En caso de error:
-    mostrarMensajeError("Ocurrió un error al calcular el préstamo. Intenta nuevamente.");
+    mostrarMensajeError(
+      "Ocurrió un error al calcular el préstamo. Intenta nuevamente."
+    );
+  } finally {
+    // Ocultar el spinner de carga después de calcular
+    document.getElementById("loading-spinner").style.display = "none";
   }
 }
 
@@ -151,7 +158,7 @@ function agregarAlHistorial(monto, cuotas, precioCuota, devolucionTotal) {
   // Guarda el historial actualizado en localStorage
   localStorage.setItem("historial", JSON.stringify(historial));
 
-  mostrarHistorial(); 
+  mostrarHistorial();
 }
 
 function mostrarHistorial() {
@@ -202,65 +209,51 @@ const grafico = new Chart(ctx, {
     labels: [],
     datasets: [
       {
-        label: "Cuota del préstamo",
+        label: "Monto de Cuotas",
         data: [],
         borderColor: "rgba(75, 192, 192, 1)",
-        fill: false,
+        borderWidth: 1,
+        tension: 0.1,
       },
     ],
   },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  },
 });
 
-// Función para actualizar el gráfico con los datos calculados
 function actualizarGrafico(monto, cuotas) {
-  let tasaInteres = calculoInteres(cuotas);
-  let cuotasCalculadas = [];
-  for (let i = 1; i <= cuotas; i++) {
-    const cuota = calculoCuotas(monto, tasaInteres, i);
-    cuotasCalculadas.push(cuota.toFixed(2));
-  }
+  const labels = Array.from({ length: cuotas }, (_, i) => `Cuota ${i + 1}`);
+  const data = Array.from({ length: cuotas }, () => monto / cuotas);
 
-  // Actualizar etiquetas del gráfico con la cantidad de cuotas
-  grafico.data.labels = Array.from(
-    { length: cuotas },
-    (_, i) => `Cuota ${i + 1}`
-  );
-
-  // Actualizar los datos del gráfico con los valores de las cuotas
-  grafico.data.datasets[0].data = cuotasCalculadas;
+  grafico.data.labels = labels;
+  grafico.data.datasets[0].data = data;
   grafico.update();
 }
 
-// ----- CAMBIO DE TEMA OSCURO/CLARO ------
+// Manejo del tema oscuro
 const themeToggle = document.getElementById("theme-toggle");
 const themeIcon = document.getElementById("theme-icon");
 
-// Cambiar tema y actualizar íconos
 function toggleTheme() {
-  const isDarkMode = themeToggle.checked;
-  document.body.classList.toggle("dark-theme", isDarkMode);
-  
-  // Actualizar el ícono según el tema
-  if (isDarkMode) {
-    themeIcon.classList.replace("fa-sun", "fa-moon");
-  } else {
-    themeIcon.classList.replace("fa-moon", "fa-sun");
-  }
-
-  // Guardar preferencia en localStorage
+  const isDarkMode = document.body.classList.toggle("dark-mode");
+  themeIcon.src = isDarkMode ? "assets/icons/moon.svg" : "assets/icons/sun.svg";
   localStorage.setItem("theme", isDarkMode ? "dark" : "light");
 }
 
-// Verificar preferencia de tema al cargar la página
+themeToggle.addEventListener("click", toggleTheme);
+
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark") {
-  themeToggle.checked = true;
-  document.body.classList.add("dark-theme");
-  themeIcon.classList.add("fa-moon");
+  document.body.classList.add("dark-mode");
+  themeIcon.src = "assets/icons/moon.svg";
 } else {
-  themeToggle.checked = false;
-  document.body.classList.remove("dark-theme");
-  themeIcon.classList.add("fa-sun");
+  themeIcon.src = "assets/icons/sun.svg";
 }
 
-themeToggle.addEventListener("change", toggleTheme);
+mostrarHistorial();
